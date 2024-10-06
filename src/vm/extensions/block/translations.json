@@ -1,0 +1,14 @@
+{
+  "en": {
+    "xcxAudioAnalyser.name": "Audio Analyser",
+    "xcxAudioAnalyser.doIt": "do it [SCRIPT]"
+  },
+  "ja": {
+    "xcxAudioAnalyser.name": "Audio Analyser",
+    "xcxAudioAnalyser.doIt": "[SCRIPT] を実行する"
+  },
+  "ja-Hira": {
+    "xcxAudioAnalyser.name": "Audio Analyser",
+    "xcxAudioAnalyser.doIt": "[SCRIPT] をじっこうする"
+  }
+}

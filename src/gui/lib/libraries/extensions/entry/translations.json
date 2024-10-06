@@ -1,0 +1,14 @@
+{
+  "en": {
+    "xcxAudioAnalyser.entry.name": "Audio Analyser",
+    "xcxAudioAnalyser.entry.description": "Description of this extension"
+  },
+  "ja": {
+    "xcxAudioAnalyser.entry.name": "Audio Analyser",
+    "xcxAudioAnalyser.entry.description": "拡張機能の説明"
+  },
+  "ja-Hira": {
+    "xcxAudioAnalyser.entry.name": "Audio Analyser",
+    "xcxAudioAnalyser.entry.description": "かくちょうきのうのせつめい"
+  }
+}
