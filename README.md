@@ -7,7 +7,7 @@ This extension add extra-blocks to analyze time and frequency domain for wavefor
 ## ✨ What You Can Do With This Extension
 
 Play [Example Project](https://xcratch.github.io/editor/#https://yokobond.github.io/xcx-audio-analyser/projects/example.sb3) to look at what you can do with "Audio Analyser" extension. 
-<iframe src="https://xcratch.github.io/editor/player#https://yokobond.github.io/xcx-audio-analyser/projects/example.sb3" width="540px" height="460px"></iframe>
+<iframe src="https://xcratch.github.io/editor/player#https://yokobond.github.io/xcx-audio-analyser/projects/example.sb3" width="540px" height="460px" allow="microphone"></iframe>
 
 
 ## How to Use in Xcratch
