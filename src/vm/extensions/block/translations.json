@@ -1,14 +1,36 @@
 {
   "en": {
     "xcxAudioAnalyser.name": "Audio Analyser",
-    "xcxAudioAnalyser.doIt": "do it [SCRIPT]"
+    "xcxAudioAnalyser.sampleSoundData": "sample sound [DOMAIN] by [FFT_WINDOW] windows",
+    "xcxAudioAnalyser.frequencyLevel": "level of frequency [FREQUENCY] Hz",
+    "xcxAudioAnalyser.frequencyDomainMin": "min decibel of frequency analyser",
+    "xcxAudioAnalyser.frequencyDomainMax": "max decibel of frequency analyser",
+    "xcxAudioAnalyser.waveformLevel": "level of waveform at [INDEX]",
+    "xcxAudioAnalyser.waveformDataLength": "data length of waveform",
+    "xcxAudioAnalyser.timeDomain": "time domain",
+    "xcxAudioAnalyser.frequencyDomain": "frequency domain"
   },
   "ja": {
     "xcxAudioAnalyser.name": "Audio Analyser",
-    "xcxAudioAnalyser.doIt": "[SCRIPT] を実行する"
+    "xcxAudioAnalyser.sampleSoundData": "音の [DOMAIN] データを窓 [FFT_WINDOW] でとる",
+    "xcxAudioAnalyser.frequencyLevel": "周波数 [FREQUENCY] Hz のレベル",
+    "xcxAudioAnalyser.frequencyDomainMin": "周波数アナライザーの最小デシベル",
+    "xcxAudioAnalyser.frequencyDomainMax": "周波数アナライザーの最大デシベル",
+    "xcxAudioAnalyser.waveformLevel": "[INDEX] 番目の波形のレベル",
+    "xcxAudioAnalyser.waveformDataLength": "波形データの長さ",
+    "xcxAudioAnalyser.timeDomain": "時間領域",
+    "xcxAudioAnalyser.frequencyDomain": "周波数領域"
   },
   "ja-Hira": {
-    "xcxAudioAnalyser.name": "Audio Analyser",
-    "xcxAudioAnalyser.doIt": "[SCRIPT] をじっこうする"
+    "xcxAudioAnalyser.name": "オーディオ アナライザー",
+    "xcxAudioAnalyser.doIt": "[SCRIPT] を じっこう する",
+    "xcxAudioAnalyser.sampleSoundData": "おと の [DOMAIN] データ を まど [FFT_WINDOW] で とる",
+    "xcxAudioAnalyser.frequencyLevel": "しゅうはすう [FREQUENCY] Hz の レベル",
+    "xcxAudioAnalyser.frequencyDomainMin": "しゅうはすう アナライザー の さいしょう デシベル",
+    "xcxAudioAnalyser.frequencyDomainMax": "しゅうはすう アナライザー の さいだい デシベル",
+    "xcxAudioAnalyser.waveformLevel": "[INDEX] ばんめ の はけい の レベル",
+    "xcxAudioAnalyser.waveformDataLength": "はけい データ の ながさ",
+    "xcxAudioAnalyser.timeDomain": "じかんりょういき",
+    "xcxAudioAnalyser.frequencyDomain": "しゅうはすうりょういき"
   }
 }
