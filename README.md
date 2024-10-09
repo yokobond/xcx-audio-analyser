@@ -1,7 +1,7 @@
 # Audio Analyser
-An example extension for [Xcratch](https://xcratch.github.io/)
+An extension for [Xcratch](https://xcratch.github.io/) to analyze audio data from microphone.
 
-This extension add extra-block "do it", that executes string in its input field as a sentence in Javascript and return the result.
+This extension add extra-blocks to analyze time and frequency domain for waveform and spectrum analysis.
 
 
 ## ✨ What You Can Do With This Extension
