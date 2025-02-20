@@ -34,6 +34,7 @@ const entry = {
             id: 'xcxAudioAnalyser.entry.description'
         });
     },
+    tags: ['sound', 'audio'],
     featured: true,
     disabled: false,
     bluetoothRequired: false,
