@@ -9,7 +9,9 @@
     "xcxAudioAnalyser.waveformDataLength": "data length of waveform",
     "xcxAudioAnalyser.timeDomain": "time domain",
     "xcxAudioAnalyser.frequencyDomain": "frequency domain",
-    "xcxAudioAnalyser.stopSampling": "stop sampling"
+    "xcxAudioAnalyser.stopSampling": "stop sampling",
+    "xcxAudioAnalyser.setFrequencyDomainMax": "set max decibel of frequency analyser to [DECIBEL]",
+    "xcxAudioAnalyser.setFrequencyDomainMin": "set min decibel of frequency analyser to [DECIBEL]"
   },
   "ja": {
     "xcxAudioAnalyser.name": "Audio Analyser",
@@ -21,7 +23,9 @@
     "xcxAudioAnalyser.waveformDataLength": "波形データの長さ",
     "xcxAudioAnalyser.timeDomain": "時間領域",
     "xcxAudioAnalyser.frequencyDomain": "周波数領域",
-    "xcxAudioAnalyser.stopSampling": "音のサンプリングを止める"
+    "xcxAudioAnalyser.stopSampling": "音のサンプリングを止める",
+    "xcxAudioAnalyser.setFrequencyDomainMax": "周波数アナライザーの最大デシベルを [DECIBEL] にする",
+    "xcxAudioAnalyser.setFrequencyDomainMin": "周波数アナライザーの最小デシベルを [DECIBEL] にする"
   },
   "ja-Hira": {
     "xcxAudioAnalyser.name": "オーディオ アナライザー",
@@ -34,6 +38,8 @@
     "xcxAudioAnalyser.waveformDataLength": "はけい データ の ながさ",
     "xcxAudioAnalyser.timeDomain": "じかんりょういき",
     "xcxAudioAnalyser.frequencyDomain": "しゅうはすうりょういき",
-    "xcxAudioAnalyser.stopSampling": "おと の サンプリング を とめる"
+    "xcxAudioAnalyser.stopSampling": "おと の サンプリング を とめる",
+    "xcxAudioAnalyser.setFrequencyDomainMax": "しゅうはすう アナライザー の さいだい デシベル を [DECIBEL] に する",
+    "xcxAudioAnalyser.setFrequencyDomainMin": "しゅうはすう アナライザー の さいしょう デシベル を [DECIBEL] に する"
   }
 }

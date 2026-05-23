@@ -141,6 +141,18 @@ class ExtensionBlocks {
          */
         this.timeData = null;
 
+        /**
+         * Maximum decibel for frequency analyser.
+         * @type {number|null}
+         */
+        this.maxDecibels = null;
+
+        /**
+         * Minimum decibel for frequency analyser.
+         * @type {number|null}
+         */
+        this.minDecibels = null;
+
         // Cleanup resources when Scratch project stops.
         if (this.runtime) {
             this.runtime.on('PROJECT_STOP_ALL', () => this.stopSampling());
@@ -236,6 +248,40 @@ class ExtensionBlocks {
                     }),
                     func: 'frequencyDomainMax',
                     arguments: {}
+                },
+                {
+                    opcode: 'setFrequencyDomainMin',
+                    blockType: BlockType.COMMAND,
+                    blockAllThreads: false,
+                    text: formatMessage({
+                        id: 'xcxAudioAnalyser.setFrequencyDomainMin',
+                        default: 'set min decibel of frequency analyser to [DECIBEL]',
+                        description: 'set min decibel of frequency analyser'
+                    }),
+                    func: 'setFrequencyDomainMin',
+                    arguments: {
+                        DECIBEL: {
+                            type: ArgumentType.NUMBER,
+                            defaultValue: -100
+                        }
+                    }
+                },
+                {
+                    opcode: 'setFrequencyDomainMax',
+                    blockType: BlockType.COMMAND,
+                    blockAllThreads: false,
+                    text: formatMessage({
+                        id: 'xcxAudioAnalyser.setFrequencyDomainMax',
+                        default: 'set max decibel of frequency analyser to [DECIBEL]',
+                        description: 'set max decibel of frequency analyser'
+                    }),
+                    func: 'setFrequencyDomainMax',
+                    arguments: {
+                        DECIBEL: {
+                            type: ArgumentType.NUMBER,
+                            defaultValue: -30
+                        }
+                    }
                 },
                 {
                     opcode: 'waveformLevel',
@@ -357,6 +403,53 @@ class ExtensionBlocks {
         if (!this.analyser) {
             const source = await this.getSoundSource();
             this.analyser = this.getAudioContext().createAnalyser();
+
+            // Apply stored decibel values safely
+            if (this.minDecibels !== null && this.maxDecibels !== null) {
+                // If both are set, first ensure they are valid relative to each other.
+                if (this.maxDecibels <= this.minDecibels) {
+                    log.warn(
+                        `Stored maxDecibels (${this.maxDecibels}) must be ` +
+                        `greater than minDecibels (${this.minDecibels}). ` +
+                        `Clamping minDecibels to ${this.maxDecibels - 1}.`
+                    );
+                    this.minDecibels = this.maxDecibels - 1;
+                }
+                
+                // Apply in an order that won't throw exception
+                if (this.maxDecibels > this.analyser.minDecibels) {
+                    this.analyser.maxDecibels = this.maxDecibels;
+                    this.analyser.minDecibels = this.minDecibels;
+                } else {
+                    this.analyser.minDecibels = this.minDecibels;
+                    this.analyser.maxDecibels = this.maxDecibels;
+                }
+            } else if (this.minDecibels !== null) {
+                if (this.minDecibels < this.analyser.maxDecibels) {
+                    this.analyser.minDecibels = this.minDecibels;
+                } else {
+                    log.warn(
+                        `Stored minDecibels (${this.minDecibels}) must be ` +
+                        `less than current maxDecibels (${this.analyser.maxDecibels}). ` +
+                        `Clamping minDecibels.`
+                    );
+                    this.minDecibels = this.analyser.maxDecibels - 1;
+                    this.analyser.minDecibels = this.minDecibels;
+                }
+            } else if (this.maxDecibels !== null) {
+                if (this.maxDecibels > this.analyser.minDecibels) {
+                    this.analyser.maxDecibels = this.maxDecibels;
+                } else {
+                    log.warn(
+                        `Stored maxDecibels (${this.maxDecibels}) must be ` +
+                        `greater than current minDecibels (${this.analyser.minDecibels}). ` +
+                        `Clamping maxDecibels.`
+                    );
+                    this.maxDecibels = this.analyser.minDecibels + 1;
+                    this.analyser.maxDecibels = this.maxDecibels;
+                }
+            }
+
             source.connect(this.analyser);
         }
         return this.analyser;
@@ -471,6 +564,64 @@ class ExtensionBlocks {
             return 0;
         }
         return this.analyser.maxDecibels;
+    }
+
+    /**
+     * Set minimum decibel for frequency domain.
+     * @param {object} args - arguments for the block
+     * @param {number} args.DECIBEL - minimum decibel
+     */
+    setFrequencyDomainMin (args) {
+        const decibel = Cast.toNumber(args.DECIBEL);
+
+        if (this.analyser) {
+            const currentMax = this.analyser.maxDecibels;
+            if (decibel >= currentMax) {
+                log.warn(
+                    `minDecibels (${decibel}) must be less than ` +
+                    `maxDecibels (${currentMax}). Clamping to ${currentMax - 1}.`
+                );
+                this.minDecibels = currentMax - 1;
+            } else {
+                this.minDecibels = decibel;
+            }
+            try {
+                this.analyser.minDecibels = this.minDecibels;
+            } catch (e) {
+                log.error(e);
+            }
+        } else {
+            this.minDecibels = decibel;
+        }
+    }
+
+    /**
+     * Set maximum decibel for frequency domain.
+     * @param {object} args - arguments for the block
+     * @param {number} args.DECIBEL - maximum decibel
+     */
+    setFrequencyDomainMax (args) {
+        const decibel = Cast.toNumber(args.DECIBEL);
+
+        if (this.analyser) {
+            const currentMin = this.analyser.minDecibels;
+            if (decibel <= currentMin) {
+                log.warn(
+                    `maxDecibels (${decibel}) must be greater than ` +
+                    `minDecibels (${currentMin}). Clamping to ${currentMin + 1}.`
+                );
+                this.maxDecibels = currentMin + 1;
+            } else {
+                this.maxDecibels = decibel;
+            }
+            try {
+                this.analyser.maxDecibels = this.maxDecibels;
+            } catch (e) {
+                log.error(e);
+            }
+        } else {
+            this.maxDecibels = decibel;
+        }
     }
 
     /**

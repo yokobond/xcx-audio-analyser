@@ -23,6 +23,12 @@ Here are the blocks provided by this extension:
 * **`stop sampling`**
   * Stops audio sampling from the microphone and releases the media stream resources. This turns off the browser's microphone indicator (e.g. red recording dot).
 
+* **`set min decibel of frequency analyser to [DECIBEL]`**
+  * Sets the minimum decibel value of the analyser. If the value is greater than or equal to the current maximum decibel, it is automatically clamped to `(maximum decibel - 1)` to avoid Web Audio API errors.
+
+* **`set max decibel of frequency analyser to [DECIBEL]`**
+  * Sets the maximum decibel value of the analyser. If the value is less than or equal to the current minimum decibel, it is automatically clamped to `(minimum decibel + 1)` to avoid Web Audio API errors.
+
 ### Reporter Blocks
 
 * **`level of frequency [FREQUENCY] Hz`**

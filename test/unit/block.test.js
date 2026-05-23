@@ -89,6 +89,8 @@ describe("blockClass", () => {
         };
         jest.clearAllMocks();
         mockAnalyserInstance.fftSize = 2048;
+        mockAnalyserInstance.minDecibels = -90;
+        mockAnalyserInstance.maxDecibels = -10;
         mockAudioContextInstance.state = 'running';
     });
 
@@ -246,6 +248,43 @@ describe("blockClass", () => {
 
         await block.getAnalyser();
         expect(block.frequencyDomainMin()).toBe(-90);
+        expect(block.frequencyDomainMax()).toBe(-10);
+    });
+
+    test("setFrequencyDomainMin and setFrequencyDomainMax set values and clip invalid inputs", async () => {
+        const block = new blockClass(runtime);
+        await block.getAnalyser();
+
+        // Check initial state
+        expect(block.frequencyDomainMin()).toBe(-90);
+        expect(block.frequencyDomainMax()).toBe(-10);
+
+        // Set valid values
+        block.setFrequencyDomainMin({ DECIBEL: -80 });
+        expect(block.frequencyDomainMin()).toBe(-80);
+
+        block.setFrequencyDomainMax({ DECIBEL: -20 });
+        expect(block.frequencyDomainMax()).toBe(-20);
+
+        // Guard test for Max: set max <= min (-80) -> should clip to min + 1 (-79)
+        block.setFrequencyDomainMax({ DECIBEL: -85 });
+        expect(block.frequencyDomainMax()).toBe(-79);
+
+        // Guard test for Min: set min >= max (-79) -> should clip to max - 1 (-80)
+        block.setFrequencyDomainMin({ DECIBEL: -70 });
+        expect(block.frequencyDomainMin()).toBe(-80);
+    });
+
+    test("safe initialization order when both min/max decibels are set before analyser creation", async () => {
+        const block = new blockClass(runtime);
+        
+        // Setting values before analyser is created
+        block.setFrequencyDomainMin({ DECIBEL: -20 });
+        block.setFrequencyDomainMax({ DECIBEL: -10 });
+
+        await block.getAnalyser();
+
+        expect(block.frequencyDomainMin()).toBe(-20);
         expect(block.frequencyDomainMax()).toBe(-10);
     });
 
