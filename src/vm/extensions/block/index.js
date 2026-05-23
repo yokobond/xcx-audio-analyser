@@ -178,11 +178,17 @@ class ExtensionBlocks {
                     blockAllThreads: false,
                     text: formatMessage({
                         id: 'xcxAudioAnalyser.getPitch',
-                        default: 'pitch (Hz)',
+                        default: 'pitch (Hz) by [FFT_WINDOW] windows',
                         description: 'get pitch from audio input'
                     }),
                     func: 'getPitch',
-                    arguments: {}
+                    arguments: {
+                        FFT_WINDOW: {
+                            type: ArgumentType.STRING,
+                            menu: 'fftWindowMenu',
+                            defaultValue: '2048'
+                        }
+                    }
                 },
                 {
                     opcode: 'sampleSoundData',
@@ -747,9 +753,20 @@ class ExtensionBlocks {
 
     /**
      * Get detected pitch from audio input.
+     * @param {object} args - arguments for the block
+     * @param {string} args.FFT_WINDOW - FFT window size.
      * @returns {Promise<number|string>} - a promise which resolves to the pitch (Hz) or empty string.
      */
-    async getPitch () {
+    async getPitch (args) {
+        const windowSize = Cast.toNumber(args.FFT_WINDOW);
+        let fftSize = FFT_WINDOW_LIST[0];
+        for (let index = 1; index < FFT_WINDOW_LIST.length; index++) {
+            fftSize = FFT_WINDOW_LIST[index];
+            if (fftSize >= windowSize) {
+                break;
+            }
+        }
+
         try {
             const context = this.getAudioContext();
             if (context.state === 'suspended') {
@@ -757,7 +774,9 @@ class ExtensionBlocks {
             }
             const analyser = await this.getAnalyser();
 
-            const fftSize = analyser.fftSize || 2048;
+            if (analyser.fftSize !== fftSize) {
+                analyser.fftSize = fftSize;
+            }
             if (!this.pitchBuffer || this.pitchBuffer.length !== fftSize) {
                 this.pitchBuffer = new Float32Array(fftSize);
             }

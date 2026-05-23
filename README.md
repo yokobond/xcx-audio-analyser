@@ -31,8 +31,9 @@ Here are the blocks provided by this extension:
 
 ### Reporter Blocks
 
-* **`pitch (Hz)`**
-  * Returns the estimated pitch (fundamental frequency) in Hz from the audio input using the autocorrelation method (ACF2+ algorithm). If the pitch cannot be detected (e.g., silence), it returns an empty string (`""`). If the audio sampling has not been started yet, it automatically starts sampling with a default FFT window size of 2048.
+* **`pitch (Hz) by [FFT_WINDOW] windows`**
+  * Returns the estimated pitch (fundamental frequency) in Hz from the audio input using the autocorrelation method (ACF2+ algorithm). If the pitch cannot be detected (e.g., silence), it returns an empty string (`""`).
+  * `FFT_WINDOW`: Select the FFT window size (32 to 32768) to analyze. Larger windows improve low-frequency accuracy (recommended 2048 for human voice), while smaller windows improve response time. If the audio sampling has not been started yet, it automatically starts sampling with the specified window size.
 
 * **`level of frequency [FREQUENCY] Hz`**
   * Returns the volume level (0 to 100) at the specified frequency (Hz) from the sampled frequency domain data.

@@ -375,7 +375,7 @@ describe("blockClass", () => {
             }
         });
 
-        const pitch = await block.getPitch();
+        const pitch = await block.getPitch({ FFT_WINDOW: 2048 });
         // Since autocorrelation might have small interpolation/calculation error, check if it's close to 440Hz.
         expect(pitch).toBeCloseTo(440, 1);
     });
@@ -388,7 +388,7 @@ describe("blockClass", () => {
             array.fill(0);
         });
 
-        const pitch = await block.getPitch();
+        const pitch = await block.getPitch({ FFT_WINDOW: 2048 });
         expect(pitch).toBe("");
     });
 
@@ -405,7 +405,7 @@ describe("blockClass", () => {
                 array.fill(128);
             });
             
-            const pitch = await block.getPitch();
+            const pitch = await block.getPitch({ FFT_WINDOW: 2048 });
             expect(pitch).toBe("");
             expect(mockAnalyserInstance.getByteTimeDomainData).toHaveBeenCalled();
         } finally {
@@ -416,13 +416,28 @@ describe("blockClass", () => {
     test("getPitch should reuse pitchBuffer if size did not change", async () => {
         const block = new blockClass(runtime);
         
-        await block.getPitch();
+        await block.getPitch({ FFT_WINDOW: 2048 });
         const firstBuffer = block.pitchBuffer;
         expect(firstBuffer).toBeInstanceOf(Float32Array);
+        expect(firstBuffer.length).toBe(2048);
 
-        await block.getPitch();
+        await block.getPitch({ FFT_WINDOW: 2048 });
         const secondBuffer = block.pitchBuffer;
         expect(firstBuffer).toBe(secondBuffer);
     });
-});
 
+    test("getPitch should resize pitchBuffer and update analyser.fftSize when FFT_WINDOW changes", async () => {
+        const block = new blockClass(runtime);
+        
+        await block.getPitch({ FFT_WINDOW: 2048 });
+        expect(mockAnalyserInstance.fftSize).toBe(2048);
+        const firstBuffer = block.pitchBuffer;
+        expect(firstBuffer.length).toBe(2048);
+
+        await block.getPitch({ FFT_WINDOW: 512 });
+        expect(mockAnalyserInstance.fftSize).toBe(512);
+        const secondBuffer = block.pitchBuffer;
+        expect(secondBuffer.length).toBe(512);
+        expect(firstBuffer).not.toBe(secondBuffer);
+    });
+});
