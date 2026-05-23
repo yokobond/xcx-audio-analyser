@@ -1,0 +1,13 @@
+lockfile_version: '1'
+generated_at: '2026-05-23T09:48:26.597116+00:00'
+apm_version: 0.14.2
+dependencies:
+- repo_url: xcratch/xcratch-skills
+  host: github.com
+  resolved_commit: 9ac2a212e2f7c3f3bca1c09f3c1c3b6efd107e3d
+  package_type: skill_bundle
+  deployed_files:
+  - .agents/skills/xcratch-extension-create
+  - .agents/skills/xcratch-extension-debug
+  - .agents/skills/xcratch-extension-debug-auto
+  content_hash: sha256:658c06faf5f13ff0a018937092330e89d85eb1d480d125eaa520c4c8e4c4a25d

@@ -1,0 +1,10 @@
+name: xcx-audio-analyser
+version: 0.2.0
+description: APM project for xcx-audio-analyser
+author: xcratch
+dependencies:
+  apm:
+  - xcratch/xcratch-skills
+  mcp: []
+includes: auto
+scripts: {}

@@ -3,3 +3,16 @@ node_modules/
 src/vm/*
 !src/vm/extensions/
 !src/vm/.*
+
+# APM dependencies
+apm_modules/
+
+# Local Agent files
+.agents/
+.claude/
+.github/
+.gemini/
+.cursor/
+
+# Playwright temporary files
+.playwright-*/*
