@@ -10,7 +10,6 @@ apm_modules/
 # Local Agent files
 .agents/
 .claude/
-.github/
 .gemini/
 .cursor/
 
