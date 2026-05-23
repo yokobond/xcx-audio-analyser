@@ -172,6 +172,19 @@ class ExtensionBlocks {
             showStatusButton: false,
             blocks: [
                 {
+                    opcode: 'getPitch',
+                    blockType: BlockType.REPORTER,
+                    disableMonitor: true,
+                    blockAllThreads: false,
+                    text: formatMessage({
+                        id: 'xcxAudioAnalyser.getPitch',
+                        default: 'pitch (Hz)',
+                        description: 'get pitch from audio input'
+                    }),
+                    func: 'getPitch',
+                    arguments: {}
+                },
+                {
                     opcode: 'sampleSoundData',
                     blockType: BlockType.COMMAND,
                     blockAllThreads: false,
@@ -654,6 +667,120 @@ class ExtensionBlocks {
             return 0;
         }
         return this.timeData.length;
+    }
+
+    /**
+     * Estimate pitch from time domain data using Autocorrelation (ACF2+ algorithm).
+     * @param {Float32Array} buf - time domain data buffer
+     * @param {number} sampleRate - sample rate
+     * @returns {number} estimated pitch in Hz, or -1 if not detected
+     */
+    autoCorrelate (buf, sampleRate) {
+        const SIZE = buf.length;
+        let rms = 0;
+
+        for (let i = 0; i < SIZE; i++) {
+            const val = buf[i];
+            rms += val * val;
+        }
+        rms = Math.sqrt(rms / SIZE);
+        if (rms < 0.01) { // not enough signal
+            return -1;
+        }
+
+        let r1 = 0;
+        let r2 = SIZE - 1;
+        const thres = 0.2;
+        for (let i = 0; i < SIZE / 2; i++) {
+            if (Math.abs(buf[i]) < thres) {
+                r1 = i;
+                break;
+            }
+        }
+        for (let i = 1; i < SIZE / 2; i++) {
+            if (Math.abs(buf[SIZE - i]) < thres) {
+                r2 = SIZE - i;
+                break;
+            }
+        }
+
+        const slicedBuf = buf.slice(r1, r2);
+        const slicedSize = slicedBuf.length;
+
+        // Auto-correlation
+        const c = new Float32Array(slicedSize);
+        for (let i = 0; i < slicedSize; i++) {
+            for (let j = 0; j < slicedSize - i; j++) {
+                c[i] = c[i] + (slicedBuf[j] * slicedBuf[j + i]);
+            }
+        }
+
+        // Find the first peak
+        let d = 0;
+        while (c[d] > c[d + 1]) {
+            d++;
+        }
+        let maxval = -1;
+        let maxpos = -1;
+        for (let i = d; i < slicedSize; i++) {
+            if (c[i] > maxval) {
+                maxval = c[i];
+                maxpos = i;
+            }
+        }
+        let T0 = maxpos;
+
+        // Interpolation
+        if (T0 > 0 && T0 < slicedSize - 1) {
+            const x1 = c[T0 - 1];
+            const x2 = c[T0];
+            const x3 = c[T0 + 1];
+            const a = (x1 + x3 - (2 * x2)) / 2;
+            const b = (x3 - x1) / 2;
+            if (a !== 0) {
+                T0 = T0 - (b / (2 * a));
+            }
+        }
+
+        return T0 > 0 ? sampleRate / T0 : -1;
+    }
+
+    /**
+     * Get detected pitch from audio input.
+     * @returns {Promise<number|string>} - a promise which resolves to the pitch (Hz) or empty string.
+     */
+    async getPitch () {
+        try {
+            const context = this.getAudioContext();
+            if (context.state === 'suspended') {
+                await context.resume();
+            }
+            const analyser = await this.getAnalyser();
+
+            const fftSize = analyser.fftSize || 2048;
+            if (!this.pitchBuffer || this.pitchBuffer.length !== fftSize) {
+                this.pitchBuffer = new Float32Array(fftSize);
+            }
+
+            if (analyser.getFloatTimeDomainData) {
+                analyser.getFloatTimeDomainData(this.pitchBuffer);
+            } else {
+                const byteData = new Uint8Array(fftSize);
+                analyser.getByteTimeDomainData(byteData);
+                for (let i = 0; i < fftSize; i++) {
+                    this.pitchBuffer[i] = (byteData[i] - 128) / 128;
+                }
+            }
+
+            const pitch = this.autoCorrelate(this.pitchBuffer, context.sampleRate);
+            if (pitch === -1) {
+                return '';
+            }
+            return pitch;
+        } catch (e) {
+            log.error(e);
+            return '';
+        }
     }
 }
 

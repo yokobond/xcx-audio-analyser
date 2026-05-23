@@ -40,6 +40,9 @@ describe("blockClass", () => {
                     array[i] = i % 256;
                 }
             }),
+            getFloatTimeDomainData: jest.fn(array => {
+                array.fill(0);
+            }),
             connect: jest.fn(),
             disconnect: jest.fn()
         };
@@ -359,4 +362,67 @@ describe("blockClass", () => {
 
         expect(thirdBuffer).not.toBe(firstBuffer);
     });
+
+    test("getPitch should estimate correct frequency from sine wave", async () => {
+        const block = new blockClass(runtime);
+        
+        // Mock a 440Hz sine wave in getFloatTimeDomainData
+        const sampleRate = 44100;
+        const frequency = 440;
+        mockAnalyserInstance.getFloatTimeDomainData.mockImplementation(array => {
+            for (let i = 0; i < array.length; i++) {
+                array[i] = Math.sin(2 * Math.PI * frequency * i / sampleRate);
+            }
+        });
+
+        const pitch = await block.getPitch();
+        // Since autocorrelation might have small interpolation/calculation error, check if it's close to 440Hz.
+        expect(pitch).toBeCloseTo(440, 1);
+    });
+
+    test("getPitch should return empty string when there is not enough signal (silent)", async () => {
+        const block = new blockClass(runtime);
+        
+        // Mock zero signal
+        mockAnalyserInstance.getFloatTimeDomainData.mockImplementation(array => {
+            array.fill(0);
+        });
+
+        const pitch = await block.getPitch();
+        expect(pitch).toBe("");
+    });
+
+    test("getPitch should fallback to getByteTimeDomainData if getFloatTimeDomainData is not available", async () => {
+        const block = new blockClass(runtime);
+        
+        // Temporarily delete getFloatTimeDomainData from the analyser instance
+        const originalGetFloat = mockAnalyserInstance.getFloatTimeDomainData;
+        delete mockAnalyserInstance.getFloatTimeDomainData;
+        
+        try {
+            // Mock getByteTimeDomainData to return silence (all values = 128)
+            mockAnalyserInstance.getByteTimeDomainData.mockImplementation(array => {
+                array.fill(128);
+            });
+            
+            const pitch = await block.getPitch();
+            expect(pitch).toBe("");
+            expect(mockAnalyserInstance.getByteTimeDomainData).toHaveBeenCalled();
+        } finally {
+            mockAnalyserInstance.getFloatTimeDomainData = originalGetFloat;
+        }
+    });
+
+    test("getPitch should reuse pitchBuffer if size did not change", async () => {
+        const block = new blockClass(runtime);
+        
+        await block.getPitch();
+        const firstBuffer = block.pitchBuffer;
+        expect(firstBuffer).toBeInstanceOf(Float32Array);
+
+        await block.getPitch();
+        const secondBuffer = block.pitchBuffer;
+        expect(firstBuffer).toBe(secondBuffer);
+    });
 });
+
