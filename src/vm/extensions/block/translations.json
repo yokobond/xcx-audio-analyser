@@ -8,7 +8,8 @@
     "xcxAudioAnalyser.waveformLevel": "level of waveform at [INDEX]",
     "xcxAudioAnalyser.waveformDataLength": "data length of waveform",
     "xcxAudioAnalyser.timeDomain": "time domain",
-    "xcxAudioAnalyser.frequencyDomain": "frequency domain"
+    "xcxAudioAnalyser.frequencyDomain": "frequency domain",
+    "xcxAudioAnalyser.stopSampling": "stop sampling"
   },
   "ja": {
     "xcxAudioAnalyser.name": "Audio Analyser",
@@ -19,7 +20,8 @@
     "xcxAudioAnalyser.waveformLevel": "[INDEX] 番目の波形のレベル",
     "xcxAudioAnalyser.waveformDataLength": "波形データの長さ",
     "xcxAudioAnalyser.timeDomain": "時間領域",
-    "xcxAudioAnalyser.frequencyDomain": "周波数領域"
+    "xcxAudioAnalyser.frequencyDomain": "周波数領域",
+    "xcxAudioAnalyser.stopSampling": "音のサンプリングを止める"
   },
   "ja-Hira": {
     "xcxAudioAnalyser.name": "オーディオ アナライザー",
@@ -31,6 +33,7 @@
     "xcxAudioAnalyser.waveformLevel": "[INDEX] ばんめ の はけい の レベル",
     "xcxAudioAnalyser.waveformDataLength": "はけい データ の ながさ",
     "xcxAudioAnalyser.timeDomain": "じかんりょういき",
-    "xcxAudioAnalyser.frequencyDomain": "しゅうはすうりょういき"
+    "xcxAudioAnalyser.frequencyDomain": "しゅうはすうりょういき",
+    "xcxAudioAnalyser.stopSampling": "おと の サンプリング を とめる"
   }
 }

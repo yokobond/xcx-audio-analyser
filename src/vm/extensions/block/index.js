@@ -112,6 +112,18 @@ class ExtensionBlocks {
         this.audioContext = null;
 
         /**
+         * Media stream from getUserMedia.
+         * @type {MediaStream}
+         */
+        this.stream = null;
+
+        /**
+         * Audio source node.
+         * @type {MediaStreamAudioSourceNode}
+         */
+        this.soundSource = null;
+
+        /**
          * Analyser node.
          * @type {AnalyserNode}
          */
@@ -128,6 +140,11 @@ class ExtensionBlocks {
          * @type {Uint8Array}
          */
         this.timeData = null;
+
+        // Cleanup resources when Scratch project stops.
+        if (this.runtime) {
+            this.runtime.on('PROJECT_STOP_ALL', () => this.stopSampling());
+        }
     }
 
     /**
@@ -164,6 +181,18 @@ class ExtensionBlocks {
                             defaultValue: '2048'
                         }
                     }
+                },
+                {
+                    opcode: 'stopSampling',
+                    blockType: BlockType.COMMAND,
+                    blockAllThreads: false,
+                    text: formatMessage({
+                        id: 'xcxAudioAnalyser.stopSampling',
+                        default: 'stop sampling',
+                        description: 'stop audio sampling'
+                    }),
+                    func: 'stopSampling',
+                    arguments: {}
                 },
                 {
                     opcode: 'frequencyLevel',
@@ -313,6 +342,7 @@ class ExtensionBlocks {
             const stream = await navigator.mediaDevices.getUserMedia({
                 audio: true
             });
+            this.stream = stream;
             this.soundSource = this.getAudioContext().createMediaStreamSource(stream);
         }
         return this.soundSource;
@@ -325,10 +355,6 @@ class ExtensionBlocks {
      */
     async getAnalyser () {
         if (!this.analyser) {
-            if (this.analyser) {
-                this.analyser.disconnect();
-                this.analyser = null;
-            }
             const source = await this.getSoundSource();
             this.analyser = this.getAudioContext().createAnalyser();
             source.connect(this.analyser);
@@ -353,17 +379,25 @@ class ExtensionBlocks {
             }
         }
         try {
+            const context = this.getAudioContext();
+            if (context.state === 'suspended') {
+                await context.resume();
+            }
             const analyser = await this.getAnalyser();
             if (analyser.fftSize !== fftSize) {
                 analyser.fftSize = fftSize;
             }
             if (domain === 'frequency') {
                 const bufferLength = analyser.frequencyBinCount;
-                this.frequencyData = new Uint8Array(bufferLength);
+                if (!this.frequencyData || this.frequencyData.length !== bufferLength) {
+                    this.frequencyData = new Uint8Array(bufferLength);
+                }
                 this.analyser.getByteFrequencyData(this.frequencyData);
                 return `frequency domain with FFT Window: ${fftSize} on sample rate: ${this.audioContext.sampleRate}`;
             } else if (domain === 'time') {
-                this.timeData = new Uint8Array(fftSize);
+                if (!this.timeData || this.timeData.length !== fftSize) {
+                    this.timeData = new Uint8Array(fftSize);
+                }
                 this.analyser.getByteTimeDomainData(this.timeData);
                 return `time domain with FFT Window: ${fftSize} on sample rate: ${this.audioContext.sampleRate}`;
             }
@@ -371,6 +405,26 @@ class ExtensionBlocks {
             log.error(e);
             return e.message;
         }
+    }
+
+    /**
+     * Stop sampling sound data and release audio resources.
+     */
+    stopSampling () {
+        if (this.stream) {
+            this.stream.getTracks().forEach(track => track.stop());
+            this.stream = null;
+        }
+        if (this.soundSource) {
+            this.soundSource.disconnect();
+            this.soundSource = null;
+        }
+        if (this.analyser) {
+            this.analyser.disconnect();
+            this.analyser = null;
+        }
+        this.frequencyData = null;
+        this.timeData = null;
     }
 
     /**

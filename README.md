@@ -9,6 +9,37 @@ This extension add extra-blocks to analyze time and frequency domain for wavefor
 Play [Example Project](https://xcratch.github.io/editor/#https://yokobond.github.io/xcx-audio-analyser/projects/example.sb3) to look at what you can do with "Audio Analyser" extension. 
 <iframe src="https://xcratch.github.io/editor/player#https://yokobond.github.io/xcx-audio-analyser/projects/example.sb3" width="540px" height="460px" allow="microphone"></iframe>
 
+## 🧩 Blocks
+
+Here are the blocks provided by this extension:
+
+### Command Blocks
+
+* **`sample sound [DOMAIN] by [FFT_WINDOW] windows`**
+  * Samples audio data from the microphone. 
+  * `DOMAIN`: Select `time domain` (for waveform analysis) or `frequency domain` (for spectrum analysis).
+  * `FFT_WINDOW`: Select the FFT window size (32 to 32768). Larger values provide higher frequency resolution but lower temporal resolution.
+
+* **`stop sampling`**
+  * Stops audio sampling from the microphone and releases the media stream resources. This turns off the browser's microphone indicator (e.g. red recording dot).
+
+### Reporter Blocks
+
+* **`level of frequency [FREQUENCY] Hz`**
+  * Returns the volume level (0 to 100) at the specified frequency (Hz) from the sampled frequency domain data.
+
+* **`min decibel of frequency analyser`**
+  * Returns the minimum decibel value of the analyser (default: `-90`).
+
+* **`max decibel of frequency analyser`**
+  * Returns the maximum decibel value of the analyser (default: `-10`).
+
+* **`level of waveform at [INDEX]`**
+  * Returns the waveform amplitude level (-50 to 50) at the specified 1-based index from the sampled time domain data.
+
+* **`data length of waveform`**
+  * Returns the length of the sampled time domain data (which corresponds to the FFT window size).
+
 
 ## How to Use in Xcratch
 
