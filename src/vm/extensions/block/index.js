@@ -178,7 +178,7 @@ class ExtensionBlocks {
                     blockAllThreads: false,
                     text: formatMessage({
                         id: 'xcxAudioAnalyser.getPitch',
-                        default: 'pitch (Hz) by [FFT_WINDOW] windows',
+                        default: 'pitch (Hz) by resolution [FFT_WINDOW]',
                         description: 'get pitch from audio input'
                     }),
                     func: 'getPitch',
@@ -191,8 +191,45 @@ class ExtensionBlocks {
                     }
                 },
                 {
+                    opcode: 'sampleWaveformData',
+                    blockType: BlockType.COMMAND,
+                    blockAllThreads: false,
+                    text: formatMessage({
+                        id: 'xcxAudioAnalyser.sampleWaveformData',
+                        default: 'sample waveform data by resolution [FFT_WINDOW]',
+                        description: 'sample time domain waveform data'
+                    }),
+                    func: 'sampleWaveformData',
+                    arguments: {
+                        FFT_WINDOW: {
+                            type: ArgumentType.STRING,
+                            menu: 'fftWindowMenu',
+                            defaultValue: '2048'
+                        }
+                    }
+                },
+                {
+                    opcode: 'sampleFrequencyData',
+                    blockType: BlockType.COMMAND,
+                    blockAllThreads: false,
+                    text: formatMessage({
+                        id: 'xcxAudioAnalyser.sampleFrequencyData',
+                        default: 'sample frequency data by resolution [FFT_WINDOW]',
+                        description: 'sample frequency domain spectrum data'
+                    }),
+                    func: 'sampleFrequencyData',
+                    arguments: {
+                        FFT_WINDOW: {
+                            type: ArgumentType.STRING,
+                            menu: 'fftWindowMenu',
+                            defaultValue: '2048'
+                        }
+                    }
+                },
+                {
                     opcode: 'sampleSoundData',
                     blockType: BlockType.COMMAND,
+                    hideFromPalette: true,
                     blockAllThreads: false,
                     text: formatMessage({
                         id: 'xcxAudioAnalyser.sampleSoundData',
@@ -472,6 +509,32 @@ class ExtensionBlocks {
             source.connect(this.analyser);
         }
         return this.analyser;
+    }
+
+    /**
+     * Sample time domain waveform data from the microphone.
+     * @param {object} args - arguments for the block
+     * @param {string} args.FFT_WINDOW - FFT window size.
+     * @returns {Promise<string>} - a promise which resolves when data is sampled.
+     */
+    sampleWaveformData (args) {
+        return this.sampleSoundData({
+            DOMAIN: 'time',
+            FFT_WINDOW: args.FFT_WINDOW
+        });
+    }
+
+    /**
+     * Sample frequency domain spectrum data from the microphone.
+     * @param {object} args - arguments for the block
+     * @param {string} args.FFT_WINDOW - FFT window size.
+     * @returns {Promise<string>} - a promise which resolves when data is sampled.
+     */
+    sampleFrequencyData (args) {
+        return this.sampleSoundData({
+            DOMAIN: 'frequency',
+            FFT_WINDOW: args.FFT_WINDOW
+        });
     }
 
     /**

@@ -229,6 +229,34 @@ describe("blockClass", () => {
         expect(result).toBe("Permission denied");
     });
 
+    test("sampleWaveformData should call sampleSoundData with time domain", async () => {
+        const block = new blockClass(runtime);
+        const sampleSoundDataSpy = jest.spyOn(block, 'sampleSoundData');
+        
+        await block.sampleWaveformData({ FFT_WINDOW: 512 });
+        
+        expect(sampleSoundDataSpy).toHaveBeenCalledWith({
+            DOMAIN: 'time',
+            FFT_WINDOW: 512
+        });
+        expect(mockAnalyserInstance.fftSize).toBe(512);
+        expect(block.timeData).toBeInstanceOf(Uint8Array);
+    });
+
+    test("sampleFrequencyData should call sampleSoundData with frequency domain", async () => {
+        const block = new blockClass(runtime);
+        const sampleSoundDataSpy = jest.spyOn(block, 'sampleSoundData');
+        
+        await block.sampleFrequencyData({ FFT_WINDOW: 1024 });
+        
+        expect(sampleSoundDataSpy).toHaveBeenCalledWith({
+            DOMAIN: 'frequency',
+            FFT_WINDOW: 1024
+        });
+        expect(mockAnalyserInstance.fftSize).toBe(1024);
+        expect(block.frequencyData).toBeInstanceOf(Uint8Array);
+    });
+
     test("frequencyLevel returns correct level and handles edge cases", () => {
         const block = new blockClass(runtime);
         

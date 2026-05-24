@@ -12,7 +12,9 @@
     "xcxAudioAnalyser.stopSampling": "stop sampling",
     "xcxAudioAnalyser.setFrequencyDomainMax": "set max decibel of frequency analyser to [DECIBEL]",
     "xcxAudioAnalyser.setFrequencyDomainMin": "set min decibel of frequency analyser to [DECIBEL]",
-    "xcxAudioAnalyser.getPitch": "pitch (Hz) by [FFT_WINDOW] windows"
+    "xcxAudioAnalyser.getPitch": "pitch (Hz) by resolution [FFT_WINDOW]",
+    "xcxAudioAnalyser.sampleWaveformData": "sample waveform data by resolution [FFT_WINDOW]",
+    "xcxAudioAnalyser.sampleFrequencyData": "sample frequency data by resolution [FFT_WINDOW]"
   },
   "ja": {
     "xcxAudioAnalyser.name": "Audio Analyser",
@@ -27,7 +29,9 @@
     "xcxAudioAnalyser.stopSampling": "音のサンプリングを止める",
     "xcxAudioAnalyser.setFrequencyDomainMax": "周波数アナライザーの最大デシベルを [DECIBEL] にする",
     "xcxAudioAnalyser.setFrequencyDomainMin": "周波数アナライザーの最小デシベルを [DECIBEL] にする",
-    "xcxAudioAnalyser.getPitch": "音程(Hz)を時間の窓 [FFT_WINDOW] でとる"
+    "xcxAudioAnalyser.getPitch": "音程(Hz)を解像度 [FFT_WINDOW] でとる",
+    "xcxAudioAnalyser.sampleWaveformData": "音の波形データを解像度 [FFT_WINDOW] でとる",
+    "xcxAudioAnalyser.sampleFrequencyData": "音の周波数データを解像度 [FFT_WINDOW] でとる"
   },
   "ja-Hira": {
     "xcxAudioAnalyser.name": "オーディオ アナライザー",
@@ -42,6 +46,8 @@
     "xcxAudioAnalyser.stopSampling": "おと の サンプリング を とめる",
     "xcxAudioAnalyser.setFrequencyDomainMax": "しゅうはすう アナライザー の さいだい デシベル を [DECIBEL] に する",
     "xcxAudioAnalyser.setFrequencyDomainMin": "しゅうはすう アナライザー の さいしょう デシベル を [DECIBEL] に する",
-    "xcxAudioAnalyser.getPitch": "おんてい (Hz) を じかん の まど [FFT_WINDOW] で とる"
+    "xcxAudioAnalyser.getPitch": "おんてい (Hz) を かいぞうど [FFT_WINDOW] で とる",
+    "xcxAudioAnalyser.sampleWaveformData": "おと の はけい データ を かいぞうど [FFT_WINDOW] で とる",
+    "xcxAudioAnalyser.sampleFrequencyData": "おと の しゅうはすう データ を かいぞうど [FFT_WINDOW] で とる"
   }
 }

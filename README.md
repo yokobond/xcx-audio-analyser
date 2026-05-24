@@ -15,10 +15,13 @@ Here are the blocks provided by this extension:
 
 ### Command Blocks
 
-* **`sample sound [DOMAIN] by [FFT_WINDOW] windows`**
-  * Samples audio data from the microphone. 
-  * `DOMAIN`: Select `time domain` (for waveform analysis) or `frequency domain` (for spectrum analysis).
-  * `FFT_WINDOW`: Select the FFT window size (32 to 32768). Larger values provide higher frequency resolution but lower temporal resolution.
+* **`sample waveform data by resolution [FFT_WINDOW]`**
+  * Samples audio waveform data from the microphone in the time domain (for waveform analysis).
+  * `FFT_WINDOW`: Select the resolution (32 to 32768) to sample. Larger values capture longer audio chunks but lower time resolution.
+
+* **`sample frequency data by resolution [FFT_WINDOW]`**
+  * Samples audio spectrum data from the microphone in the frequency domain (for spectral analysis).
+  * `FFT_WINDOW`: Select the resolution (32 to 32768) to sample. Larger values provide higher frequency resolution (finer frequency bins) but slower time response.
 
 * **`stop sampling`**
   * Stops audio sampling from the microphone and releases the media stream resources. This turns off the browser's microphone indicator (e.g. red recording dot).
@@ -31,9 +34,9 @@ Here are the blocks provided by this extension:
 
 ### Reporter Blocks
 
-* **`pitch (Hz) by [FFT_WINDOW] windows`**
+* **`pitch (Hz) by resolution [FFT_WINDOW]`**
   * Returns the estimated pitch (fundamental frequency) in Hz from the audio input using the autocorrelation method (ACF2+ algorithm). If the pitch cannot be detected (e.g., silence), it returns an empty string (`""`).
-  * `FFT_WINDOW`: Select the FFT window size (32 to 32768) to analyze. Larger windows improve low-frequency accuracy (recommended 2048 for human voice), while smaller windows improve response time. If the audio sampling has not been started yet, it automatically starts sampling with the specified window size.
+  * `FFT_WINDOW`: Select the resolution (32 to 32768) to analyze. Larger values improve low-frequency accuracy (recommended 2048 for human voice), while smaller values improve response time. If the audio sampling has not been started yet, it automatically starts sampling with the specified resolution.
 
 * **`level of frequency [FREQUENCY] Hz`**
   * Returns the volume level (0 to 100) at the specified frequency (Hz) from the sampled frequency domain data.
