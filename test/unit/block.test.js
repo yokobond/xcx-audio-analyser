@@ -141,7 +141,7 @@ describe("blockClass", () => {
 
         const fftMenu = block.getFFTWindowMenu();
         expect(fftMenu).toContainEqual({ text: "2048", value: "2048" });
-        expect(fftMenu.length).toBe(11);
+        expect(fftMenu.length).toBe(4);
     });
 
     test("getAudioContext should create and reuse AudioContext", () => {
@@ -210,10 +210,10 @@ describe("blockClass", () => {
             FFT_WINDOW: 50
         });
 
-        expect(mockAnalyserInstance.fftSize).toBe(64);
+        expect(mockAnalyserInstance.fftSize).toBe(512);
         expect(mockAnalyserInstance.getByteTimeDomainData).toHaveBeenCalled();
         expect(block.timeData).toBeInstanceOf(Uint8Array);
-        expect(result).toBe("time domain with FFT Window: 64 on sample rate: 44100");
+        expect(result).toBe("time domain with FFT Window: 512 on sample rate: 44100");
     });
 
     test("sampleSoundData returns error message when userMedia fails", async () => {

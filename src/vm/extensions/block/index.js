@@ -9,7 +9,7 @@ import blockIcon from './block-icon.png';
  * List of FFT window sizes.
  * @type {number[]}
  */
-const FFT_WINDOW_LIST = [32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, 32768];
+const FFT_WINDOW_LIST = [512, 1024, 2048, 4096];
 
 /**
  * Formatter which is used for translation.
@@ -549,10 +549,10 @@ class ExtensionBlocks {
     async sampleSoundData (args) {
         const domain = Cast.toString(args.DOMAIN);
         const windowSize = Cast.toNumber(args.FFT_WINDOW);
-        let fftSize = FFT_WINDOW_LIST[0];
-        for (let index = 1; index < FFT_WINDOW_LIST.length; index++) {
-            fftSize = FFT_WINDOW_LIST[index];
-            if (fftSize >= windowSize) {
+        let fftSize = FFT_WINDOW_LIST[FFT_WINDOW_LIST.length - 1];
+        for (let index = 0; index < FFT_WINDOW_LIST.length; index++) {
+            if (FFT_WINDOW_LIST[index] >= windowSize) {
+                fftSize = FFT_WINDOW_LIST[index];
                 break;
             }
         }
@@ -825,10 +825,10 @@ class ExtensionBlocks {
      */
     async getPitch (args) {
         const windowSize = Cast.toNumber(args.FFT_WINDOW);
-        let fftSize = FFT_WINDOW_LIST[0];
-        for (let index = 1; index < FFT_WINDOW_LIST.length; index++) {
-            fftSize = FFT_WINDOW_LIST[index];
-            if (fftSize >= windowSize) {
+        let fftSize = FFT_WINDOW_LIST[FFT_WINDOW_LIST.length - 1];
+        for (let index = 0; index < FFT_WINDOW_LIST.length; index++) {
+            if (FFT_WINDOW_LIST[index] >= windowSize) {
+                fftSize = FFT_WINDOW_LIST[index];
                 break;
             }
         }
