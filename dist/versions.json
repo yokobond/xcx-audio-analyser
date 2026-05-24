@@ -2,6 +2,11 @@
   "extensionId": "xcxAudioAnalyser",
   "versions": [
     {
+      "version": "0.5.0",
+      "buildDate": "2026-05-24T23:41:52.372Z",
+      "module": "0.5.0/xcxAudioAnalyser.mjs"
+    },
+    {
       "version": "0.4.0",
       "buildDate": "2026-05-24T03:29:20.677Z",
       "module": "0.4.0/xcxAudioAnalyser.mjs"
@@ -17,5 +22,5 @@
       "module": "0.2.0/xcxAudioAnalyser.mjs"
     }
   ],
-  "latest": "0.4.0"
+  "latest": "0.5.0"
 }
