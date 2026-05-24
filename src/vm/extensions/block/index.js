@@ -153,6 +153,12 @@ class ExtensionBlocks {
          */
         this.minDecibels = null;
 
+        /**
+         * Last estimated pitch volume (RMS scaled).
+         * @type {number}
+         */
+        this.lastPitchVolume = 0;
+
         // Cleanup resources when Scratch project stops.
         if (this.runtime) {
             this.runtime.on('PROJECT_STOP_ALL', () => this.stopSampling());
@@ -189,6 +195,19 @@ class ExtensionBlocks {
                             defaultValue: '2048'
                         }
                     }
+                },
+                {
+                    opcode: 'getPitchVolume',
+                    blockType: BlockType.REPORTER,
+                    disableMonitor: true,
+                    blockAllThreads: false,
+                    text: formatMessage({
+                        id: 'xcxAudioAnalyser.getPitchVolume',
+                        default: 'pitch volume',
+                        description: 'get volume (RMS) at the last pitch detection'
+                    }),
+                    func: 'getPitchVolume',
+                    arguments: {}
                 },
                 '---',
                 {
@@ -745,17 +764,11 @@ class ExtensionBlocks {
      * Estimate pitch from time domain data using Autocorrelation (ACF2+ algorithm).
      * @param {Float32Array} buf - time domain data buffer
      * @param {number} sampleRate - sample rate
+     * @param {number} rms - pre-calculated RMS value
      * @returns {number} estimated pitch in Hz, or -1 if not detected
      */
-    autoCorrelate (buf, sampleRate) {
+    autoCorrelate (buf, sampleRate, rms) {
         const SIZE = buf.length;
-        let rms = 0;
-
-        for (let i = 0; i < SIZE; i++) {
-            const val = buf[i];
-            rms += val * val;
-        }
-        rms = Math.sqrt(rms / SIZE);
         if (rms < 0.01) { // not enough signal
             return -1;
         }
@@ -857,7 +870,17 @@ class ExtensionBlocks {
                 }
             }
 
-            const pitch = this.autoCorrelate(this.pitchBuffer, context.sampleRate);
+            // Calculate RMS for volume cache
+            let rms = 0;
+            const SIZE = this.pitchBuffer.length;
+            for (let i = 0; i < SIZE; i++) {
+                const val = this.pitchBuffer[i];
+                rms += val * val;
+            }
+            rms = Math.sqrt(rms / SIZE);
+            this.lastPitchVolume = Math.min(100, rms * 100);
+
+            const pitch = this.autoCorrelate(this.pitchBuffer, context.sampleRate, rms);
             if (pitch === -1) {
                 return '';
             }
@@ -866,6 +889,14 @@ class ExtensionBlocks {
             log.error(e);
             return '';
         }
+    }
+
+    /**
+     * Get the volume (RMS) at the last pitch detection.
+     * @returns {number} volume in 0..100 range
+     */
+    getPitchVolume () {
+        return this.lastPitchVolume;
     }
 }
 

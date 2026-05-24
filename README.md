@@ -38,6 +38,10 @@ Here are the blocks provided by this extension:
   * Returns the estimated pitch (fundamental frequency) in Hz from the audio input using the autocorrelation method (ACF2+ algorithm). If the pitch cannot be detected (e.g., silence), it returns an empty string (`""`).
   * `FFT_WINDOW`: Select the resolution (512 to 4096) to analyze. Larger values improve low-frequency accuracy (recommended 2048 for human voice), while smaller values improve response time. If the audio sampling has not been started yet, it automatically starts sampling with the specified resolution.
 
+* **`pitch volume`**
+  * Returns the volume level (0 to 100) at the last pitch detection. This block returns the cached RMS (Root Mean Square) value calculated during the `pitch (Hz) by resolution [FFT_WINDOW]` block execution without triggering additional audio capture.
+  * The value ranges from `0` (complete silence) to `100` (clipped/extreme loud input). For a maximum-volume non-clipped sine wave, the value is around `70.8`.
+
 * **`level of frequency [FREQUENCY] Hz`**
   * Returns the volume level (0 to 100) at the specified frequency (Hz) from the sampled frequency domain data.
 

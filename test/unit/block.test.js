@@ -468,4 +468,39 @@ describe("blockClass", () => {
         expect(secondBuffer.length).toBe(512);
         expect(firstBuffer).not.toBe(secondBuffer);
     });
+
+    test("getPitchVolume should return 0 initially", () => {
+        const block = new blockClass(runtime);
+        expect(block.getPitchVolume()).toBe(0);
+    });
+
+    test("getPitchVolume should return correct cached volume after getPitch is called", async () => {
+        const block = new blockClass(runtime);
+
+        // Sine wave (RMS should be close to 1/sqrt(2) ≈ 0.707, so volume ≈ 70.7)
+        const sampleRate = 44100;
+        const frequency = 440;
+        mockAnalyserInstance.getFloatTimeDomainData.mockImplementation(array => {
+            for (let i = 0; i < array.length; i++) {
+                array[i] = Math.sin(2 * Math.PI * frequency * i / sampleRate);
+            }
+        });
+
+        await block.getPitch({ FFT_WINDOW: 2048 });
+        
+        const volume = block.getPitchVolume();
+        expect(volume).toBeCloseTo(70.8, 1);
+    });
+
+    test("getPitchVolume should handle quiet input correctly", async () => {
+        const block = new blockClass(runtime);
+
+        // Silent signal (RMS = 0, volume = 0)
+        mockAnalyserInstance.getFloatTimeDomainData.mockImplementation(array => {
+            array.fill(0);
+        });
+
+        await block.getPitch({ FFT_WINDOW: 2048 });
+        expect(block.getPitchVolume()).toBe(0);
+    });
 });
