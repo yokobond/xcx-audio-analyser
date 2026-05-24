@@ -190,6 +190,7 @@ class ExtensionBlocks {
                         }
                     }
                 },
+                '---',
                 {
                     opcode: 'sampleWaveformData',
                     blockType: BlockType.COMMAND,
@@ -208,6 +209,38 @@ class ExtensionBlocks {
                         }
                     }
                 },
+                {
+                    opcode: 'waveformLevel',
+                    blockType: BlockType.REPORTER,
+                    disableMonitor: true,
+                    blockAllThreads: false,
+                    text: formatMessage({
+                        id: 'xcxAudioAnalyser.waveformLevel',
+                        default: 'level of waveform at [INDEX]',
+                        description: 'get level of waveform'
+                    }),
+                    func: 'waveformLevel',
+                    arguments: {
+                        INDEX: {
+                            type: ArgumentType.NUMBER,
+                            defaultValue: 1
+                        }
+                    }
+                },
+                {
+                    opcode: 'waveformDataLength',
+                    blockType: BlockType.REPORTER,
+                    disableMonitor: true,
+                    blockAllThreads: false,
+                    text: formatMessage({
+                        id: 'xcxAudioAnalyser.waveformDataLength',
+                        default: 'data length of waveform',
+                        description: 'get length of waveform data'
+                    }),
+                    func: 'waveformDataLength',
+                    arguments: {}
+                },
+                '---',
                 {
                     opcode: 'sampleFrequencyData',
                     blockType: BlockType.COMMAND,
@@ -249,18 +282,6 @@ class ExtensionBlocks {
                             defaultValue: '2048'
                         }
                     }
-                },
-                {
-                    opcode: 'stopSampling',
-                    blockType: BlockType.COMMAND,
-                    blockAllThreads: false,
-                    text: formatMessage({
-                        id: 'xcxAudioAnalyser.stopSampling',
-                        default: 'stop sampling',
-                        description: 'stop audio sampling'
-                    }),
-                    func: 'stopSampling',
-                    arguments: {}
                 },
                 {
                     opcode: 'frequencyLevel',
@@ -339,35 +360,17 @@ class ExtensionBlocks {
                         }
                     }
                 },
+                '---',
                 {
-                    opcode: 'waveformLevel',
-                    blockType: BlockType.REPORTER,
-                    disableMonitor: true,
+                    opcode: 'stopSampling',
+                    blockType: BlockType.COMMAND,
                     blockAllThreads: false,
                     text: formatMessage({
-                        id: 'xcxAudioAnalyser.waveformLevel',
-                        default: 'level of waveform at [INDEX]',
-                        description: 'get level of waveform'
+                        id: 'xcxAudioAnalyser.stopSampling',
+                        default: 'stop sampling',
+                        description: 'stop audio sampling'
                     }),
-                    func: 'waveformLevel',
-                    arguments: {
-                        INDEX: {
-                            type: ArgumentType.NUMBER,
-                            defaultValue: 1
-                        }
-                    }
-                },
-                {
-                    opcode: 'waveformDataLength',
-                    blockType: BlockType.REPORTER,
-                    disableMonitor: true,
-                    blockAllThreads: false,
-                    text: formatMessage({
-                        id: 'xcxAudioAnalyser.waveformDataLength',
-                        default: 'data length of waveform',
-                        description: 'get length of waveform data'
-                    }),
-                    func: 'waveformDataLength',
+                    func: 'stopSampling',
                     arguments: {}
                 }
             ],
