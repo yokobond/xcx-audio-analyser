@@ -11,3 +11,15 @@ dependencies:
   - .agents/skills/xcratch-extension-debug
   - .agents/skills/xcratch-extension-debug-auto
   content_hash: sha256:658c06faf5f13ff0a018937092330e89d85eb1d480d125eaa520c4c8e4c4a25d
+- repo_url: yokobond/scratch-skills
+  host: github.com
+  resolved_commit: bc163c7af7557d106634619cf321a3598f25d240
+  package_type: skill_bundle
+  deployed_files:
+  - .agents/skills/scratch-block-dragging
+  - .agents/skills/scratch-costume-insert
+  - .agents/skills/scratch-project-edit
+  - .agents/skills/scratch-project-file
+  - .agents/skills/scratch-project-inspect
+  - .agents/skills/scratch-sprite-library
+  content_hash: sha256:141c2f348224480e8a9b697da99b52872ccb360757283187bf2688b87d89ddf1

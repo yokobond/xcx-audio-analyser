@@ -5,6 +5,7 @@ author: xcratch
 dependencies:
   apm:
   - xcratch/xcratch-skills
+  - yokobond/scratch-skills
   mcp: []
 includes: auto
 scripts: {}
