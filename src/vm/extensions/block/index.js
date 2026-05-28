@@ -762,6 +762,7 @@ class ExtensionBlocks {
 
     /**
      * Estimate pitch from time domain data using Autocorrelation (ACF2+ algorithm).
+     * @reference https://github.com/cwilso/PitchDetect
      * @param {Float32Array} buf - time domain data buffer
      * @param {number} sampleRate - sample rate
      * @param {number} rms - pre-calculated RMS value
