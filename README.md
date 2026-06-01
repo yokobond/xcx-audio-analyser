@@ -9,6 +9,29 @@ This extension add extra-blocks to analyze time and frequency domain for wavefor
 Play [Example Project](https://xcratch.github.io/editor/#https://yokobond.github.io/xcx-audio-analyser/projects/example.sb3) to look at what you can do with "Audio Analyser" extension. 
 <iframe src="https://xcratch.github.io/editor/player#https://yokobond.github.io/xcx-audio-analyser/projects/example.sb3" width="540px" height="460px" allow="microphone"></iframe>
 
+### 🎤 Pitch Recorder
+
+Play [Pitch Recorder](https://xcratch.github.io/editor/#https://yokobond.github.io/xcx-audio-analyser/projects/pitch-recorder.sb3) to record a melody from microphone and play it back.
+<iframe src="https://xcratch.github.io/editor/player#https://yokobond.github.io/xcx-audio-analyser/projects/pitch-recorder.sb3" width="540px" height="460px" allow="microphone"></iframe>
+
+This project demonstrates pitch detection using the `pitch (Hz)` block combined with the Scratch Music extension.
+
+**How to use:**
+
+| Operation | Action |
+|-----------|--------|
+| Click 🎤 mic sprite | Countdown (3, 2, 1) → start recording; click again to stop |
+| Press `r` key | Start recording immediately |
+| Press `s` key | Stop recording |
+| Click 🎹 player sprite / Press `p` key | Play back the recorded melody |
+
+**How it works:**
+
+The project consists of two sprites:
+
+- **mic** — Listens to audio input via `pitch (Hz) by resolution 2048` block, converts detected frequency to a MIDI note number using the formula `round(12 × log₂(Hz / 440) + 69)`, and stores it in the `melody` list. When the pitch volume is too low or no pitch is detected, a rest (`0`) is recorded instead. The mic sprite toggles its costume between "off" and "on" to show the recording state.
+- **player** — Reads the `melody` list and plays each note using the Music extension's `play note for beats` block (`0.25` beats per note). Rests are played using `rest for beats`.
+
 ## 🧩 Blocks
 
 Here are the blocks provided by this extension:
